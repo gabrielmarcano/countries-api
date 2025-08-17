@@ -1,9 +1,14 @@
 import axios from 'axios'
 import type { CountriesResponse, CountryResponse } from './types'
 
-export const getCountries = () =>
+export const getAllCountries = () =>
   axios.get<CountriesResponse>(
     'https://restcountries.com/v3.1/all?fields=name,flags,population,region,capital'
+  )
+
+export const getCountriesByRegion = (region: string) =>
+  axios.get<CountriesResponse>(
+    `https://restcountries.com/v3.1/region/${region}?fields=name,flags,population,region,capital`
   )
 
 export const getCountry = (name: string) =>
