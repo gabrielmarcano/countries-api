@@ -13,5 +13,5 @@ export const getCountriesByRegion = (region: string) =>
 
 export const getCountry = (name: string) =>
   axios.get<CountryResponse>(
-    `https://restcountries.com/v3.1/name/${name}?fields=name,flags,population,region,capital`
+    `https://restcountries.com/v3.1/name/${name}?fields=name,flags,population,region,subregion,capital,tld,currencies,languages,borders`
   )

@@ -7,6 +7,11 @@ import { BrowserRouter, Route, Routes } from 'react-router'
 import CountryPage from './pages/CountryPage.tsx'
 import HomePage from './pages/HomePage.tsx'
 
+import countries from 'i18n-iso-countries'
+import en from 'i18n-iso-countries/langs/en.json'
+
+countries.registerLocale(en)
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
