@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { getAllCountries, getCountry } from './api'
+import { getAllCountries, getCountriesByRegion, getCountry } from './api'
 
 export const useAllCountries = (config?: object) => {
   return useQuery({
@@ -11,8 +11,8 @@ export const useAllCountries = (config?: object) => {
 
 export const useCountriesByRegion = (region: string, config?: object) => {
   return useQuery({
-    queryKey: ['countries', region],
-    queryFn: getAllCountries,
+    queryKey: ['countriesByRegion', region],
+    queryFn: () => getCountriesByRegion(region),
     ...config,
   })
 }

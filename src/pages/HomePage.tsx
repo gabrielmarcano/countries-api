@@ -4,7 +4,9 @@ import {
   faChevronDown,
 } from '@fortawesome/free-solid-svg-icons'
 import CountryCard from '../components/CountryCard'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+import { useAllCountries, useCountriesByRegion } from '../api/queries'
+import CountryCardSkeleton from '../components/CountryCardSkeleton'
 
 function HomePage() {
   const [inputValue, setInputValue] = useState('')
@@ -12,6 +14,30 @@ function HomePage() {
 
   const [isOpen, setIsOpen] = useState(false)
   const [selectedRegion, setSelectedRegion] = useState('All')
+
+  const {
+    data: allCountries,
+    isLoading,
+    isError,
+  } = useAllCountries({
+    enabled: selectedRegion === 'All',
+  })
+
+  const {
+    data: countriesByRegion,
+    isLoading: isLoadingByRegion,
+    isError: isErrorByRegion,
+  } = useCountriesByRegion(selectedRegion.toLowerCase(), {
+    enabled: selectedRegion !== 'All',
+  })
+
+  const countries = useMemo(() => {
+    if (selectedRegion === 'All') {
+      return allCountries
+    } else {
+      return countriesByRegion
+    }
+  }, [selectedRegion, allCountries, countriesByRegion])
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -74,19 +100,23 @@ function HomePage() {
             </div>
           </button>
         </div>
-        <div className="flex w-full flex-col items-center justify-center">
-          <CountryCard />
-          <CountryCard />
-          <CountryCard />
-          <CountryCard />
-          <CountryCard />
-          <CountryCard />
-          <CountryCard />
-          <CountryCard />
-          <CountryCard />
-          <CountryCard />
-          <CountryCard />
-          <CountryCard />
+        <div className="flex w-full flex-col items-center justify-center px-8">
+          {countries &&
+            countries.data?.map((country) => (
+              <CountryCard key={country.name.common} data={country} />
+            ))}
+
+          {(isLoading || isLoadingByRegion) && (
+            <>
+              {[...Array(6)].map((_, i) => (
+                <CountryCardSkeleton key={i} />
+              ))}
+            </>
+          )}
+
+          {(isError || isErrorByRegion) && (
+            <p className="text-red-500">Error</p>
+          )}
         </div>
       </div>
     </>
