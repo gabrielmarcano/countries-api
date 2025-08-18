@@ -100,7 +100,7 @@ function HomePage() {
             </div>
           </button>
         </div>
-        <div className="flex w-full flex-col items-center justify-center px-8">
+        <div className="flex w-full flex-col items-center justify-center px-6">
           {countries &&
             countries.data?.map((country) => (
               <CountryCard key={country.name.common} data={country} />
