@@ -4,17 +4,18 @@ import {
   faChevronDown,
 } from '@fortawesome/free-solid-svg-icons'
 import CountryCard from '../components/CountryCard'
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import {
   useAllCountries,
   useCountriesByRegion,
   useCountry,
 } from '../api/queries'
 import CountryCardSkeleton from '../components/CountryCardSkeleton'
+import { useDebounce } from '../hooks/useDebounce'
 
 function HomePage() {
   const [inputValue, setInputValue] = useState('')
-  const [search, setSearch] = useState('')
+  const debouncedSearch = useDebounce(inputValue, 500)
 
   const [isOpen, setIsOpen] = useState(false)
   const [selectedRegion, setSelectedRegion] = useState('All')
@@ -39,8 +40,8 @@ function HomePage() {
     data: country,
     isLoading: isLoadingCountry,
     isError: isErrorCountry,
-  } = useCountry(search, {
-    enabled: !!search,
+  } = useCountry(debouncedSearch, {
+    enabled: !!debouncedSearch,
   })
 
   const isLoadingAll = useMemo(
@@ -60,16 +61,6 @@ function HomePage() {
       return countriesByRegion
     }
   }, [selectedRegion, allCountries, countriesByRegion, country])
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setSearch(inputValue)
-    }, 500)
-
-    return () => {
-      clearTimeout(timer)
-    }
-  }, [inputValue])
 
   return (
     <>
@@ -174,12 +165,12 @@ function RegionOption({
   bottom?: boolean
 }) {
   return (
-    <button
+    <div
       onClick={onClick}
       className={`w-full cursor-pointer py-2 pl-6 text-left hover:bg-gray-50 ${top && 'rounded-t-md pt-4'} ${bottom && 'rounded-b-md pb-4'}`}
     >
       {region}
-    </button>
+    </div>
   )
 }
 

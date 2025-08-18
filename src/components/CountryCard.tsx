@@ -1,7 +1,12 @@
 import { Link } from 'react-router'
 import type { CountriesResponse } from '../api/types'
+import { memo } from 'react'
 
-function CountryCard({ data }: { data: CountriesResponse[0] }) {
+const CountryCard = memo(function CountryCard({
+  data,
+}: {
+  data: CountriesResponse[0]
+}) {
   return (
     <div className="flex w-full flex-col items-center justify-center rounded-sm bg-white shadow-[0_5px_15px_rgba(0,0,0,0.05)]">
       <Link
@@ -25,7 +30,7 @@ function CountryCard({ data }: { data: CountriesResponse[0] }) {
       </div>
     </div>
   )
-}
+})
 
 function Detail({
   title,
