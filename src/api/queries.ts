@@ -5,6 +5,7 @@ export const useAllCountries = (config?: object) => {
   return useQuery({
     queryKey: ['countries'],
     queryFn: getAllCountries,
+    staleTime: 5 * 60 * 1000,
     ...config,
   })
 }
@@ -13,6 +14,7 @@ export const useCountriesByRegion = (region: string, config?: object) => {
   return useQuery({
     queryKey: ['countriesByRegion', region],
     queryFn: () => getCountriesByRegion(region),
+    staleTime: 5 * 60 * 1000,
     ...config,
   })
 }
@@ -21,6 +23,7 @@ export const useCountry = (name: string, config?: object) => {
   return useQuery({
     queryKey: ['country', name],
     queryFn: () => getCountry(name),
+    staleTime: 5 * 60 * 1000,
     ...config,
   })
 }
