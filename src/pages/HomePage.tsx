@@ -73,10 +73,10 @@ function HomePage() {
 
   return (
     <>
-      <div className="flex flex-col items-center p-6">
-        <div className="mb-10 w-full">
-          <div className="mb-12 flex w-full">
-            <div className="flex w-full items-center rounded-md px-8 py-4 shadow-[0_0px_20px_rgba(0,0,0,0.1)]">
+      <div className="flex flex-col items-center p-6 md:p-12 xl:px-20">
+        <div className="mb-10 w-full md:mb-16 md:flex md:justify-between">
+          <div className="mb-12 flex w-full md:mb-0">
+            <div className="flex w-full items-center rounded-md px-8 py-4 shadow-[0_0px_20px_rgba(0,0,0,0.1)] md:w-3/4 xl:w-3/7">
               <FontAwesomeIcon
                 icon={faMagnifyingGlass}
                 className="text-gray-400"
@@ -99,7 +99,7 @@ function HomePage() {
             />
           )}
         </div>
-        <div className="flex w-full flex-col items-center justify-center px-6">
+        <div className="flex w-full flex-col items-center justify-center gap-15 px-6 md:grid md:grid-cols-2 md:gap-20 md:px-0 lg:grid-cols-3 xl:grid-cols-4">
           {countries &&
             countries.data?.map((country) => (
               <CountryCard key={country.name.common} data={country} />
@@ -134,7 +134,7 @@ function Filter({
   return (
     <button
       onClick={() => setIsOpen(!isOpen)}
-      className="relative flex w-50 cursor-pointer items-center justify-between rounded-md p-4 text-sm shadow-[0_0px_20px_rgba(0,0,0,0.1)]"
+      className="relative flex w-50 cursor-pointer items-center justify-between rounded-md p-4 text-sm shadow-[0_0px_20px_rgba(0,0,0,0.1)] md:w-1/2 xl:w-1/5"
     >
       <p className="pl-4">
         {selectedRegion === 'All' ? 'Filter by Region' : selectedRegion}
