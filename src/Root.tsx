@@ -17,8 +17,8 @@ function Root() {
 
   return (
     <>
-      <div className="font-nunito min-h-screen bg-white">
-        <div className="flex h-12 w-full items-center justify-between p-4 shadow-md">
+      <div className="font-nunito min-h-screen w-full bg-gray-50">
+        <header className="flex h-24 w-full items-center justify-between bg-white p-4 shadow-md/2">
           <h1 className="text-md font-bold text-gray-800">
             Where in the world?
           </h1>
@@ -31,7 +31,7 @@ function Root() {
             <FontAwesomeIcon icon={darkMode ? faSun : faMoon} />
             <span className="text-sm">{darkMode ? 'Light' : 'Dark'} mode</span>
           </button>
-        </div>
+        </header>
         <Outlet />
       </div>
     </>

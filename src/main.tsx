@@ -15,6 +15,14 @@ const queryClient = new QueryClient({
   },
 })
 
+declare global {
+  interface Window {
+    __TANSTACK_QUERY_CLIENT__: import('@tanstack/query-core').QueryClient
+  }
+}
+
+window.__TANSTACK_QUERY_CLIENT__ = queryClient
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>

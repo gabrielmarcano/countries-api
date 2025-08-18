@@ -6,14 +6,19 @@
 @theme {
   /* Dark Mode Elements */
   --color-blue-900: hsl(209, 23%, 22%);
+
   /* Dark Mode Background  */
   --color-blue-950: hsl(207, 26%, 17%);
+
   /* Light Mode Text */
   --color-gray-950: hsl(200, 15%, 8%);
+
   /* Light Mode Input */
   --color-gray-400: hsl(0, 0%, 50%);
+
   /* Light Mode Background */
   --color-gray-50: hsl(0, 0%, 99%);
+
   /* Dark Mode Text & Light Mode Elements */
   --color-white: hsl(0, 100%, 100%);
 
