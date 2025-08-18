@@ -1,22 +1,23 @@
 import { Link, useParams } from 'react-router'
-import { useCountry } from '../api/queries'
+import { useAlpha } from '../api/queries'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
-import type { CountryResponse } from '../api/types'
+import type { AlphaResponse } from '../api/types'
 
 import countries from 'i18n-iso-countries'
 
 function CountryPage() {
-  const { country } = useParams()
+  const { countryCode } = useParams()
+
   const {
     data: countryData,
     isLoading: isLoadingCountry,
     isError: isErrorCountry,
-  } = useCountry(country!, {
-    enabled: !!country,
+  } = useAlpha(countryCode!, {
+    enabled: !!countryCode,
   })
 
-  const theCountry = countryData?.data[0]
+  const theCountry = countryData?.data
 
   return (
     <>
@@ -30,7 +31,7 @@ function CountryPage() {
             <p>Back</p>
           </Link>
         </div>
-        {theCountry && <CountryInformation data={theCountry} />}
+        {theCountry && <CountryInformation country={theCountry} />}
 
         {isLoadingCountry && <CountryInformationSkeleton />}
 
@@ -42,50 +43,51 @@ function CountryPage() {
 
 export default CountryPage
 
-function CountryInformation({ data }: { data: CountryResponse[0] }) {
+function CountryInformation({ country }: { country: AlphaResponse }) {
   return (
     <>
       <div className="flex w-full flex-col items-start gap-12 md:flex-row">
         <img
-          src={data.flags.png}
-          alt={data.name.common + ' flag'}
+          src={country.flags.png}
+          alt={country.name.common + ' flag'}
           className="h-full w-full rounded-t-sm object-cover"
         />
         <div className="flex w-full flex-col gap-12 lg:gap-4">
           <div className="flex flex-col gap-8 lg:py-12">
             <h2 className="text-2xl font-extrabold lg:text-3xl">
-              {data.name.common}
+              {country.name.common}
             </h2>
             <div className="flex flex-col gap-8 md:flex-row md:justify-between">
               <div className="flex flex-col gap-1">
                 <Detail
                   title={'Native Name'}
                   content={
-                    data.name.nativeName[Object.keys(data.name.nativeName)[0]]
-                      .common
+                    country.name.nativeName[
+                      Object.keys(country.name.nativeName)[0]
+                    ].common
                   }
                 />
                 <Detail
                   title={'Population'}
-                  content={data.population.toLocaleString('en-US')}
+                  content={country.population.toLocaleString('en-US')}
                 />
-                <Detail title={'Region'} content={data.region} />
-                <Detail title={'Sub Region'} content={data.subregion} />
-                <Detail title={'Capital'} content={data.capital[0]} />
+                <Detail title={'Region'} content={country.region} />
+                <Detail title={'Sub Region'} content={country.subregion} />
+                <Detail title={'Capital'} content={country.capital[0]} />
               </div>
 
               <div className="flex flex-col gap-1">
-                <Detail title={'Top Level Domain'} content={data.tld} />
+                <Detail title={'Top Level Domain'} content={country.tld} />
                 <Detail
                   title={'Currencies'}
-                  content={Object.keys(data.currencies).map(
-                    (key) => data.currencies[key].name
+                  content={Object.keys(country.currencies).map(
+                    (key) => country.currencies[key].name
                   )}
                 />
                 <Detail
                   title={'Languages'}
-                  content={Object.keys(data.languages).map(
-                    (key) => data.languages[key]
+                  content={Object.keys(country.languages).map(
+                    (key) => country.languages[key]
                   )}
                 />
               </div>
@@ -96,11 +98,17 @@ function CountryInformation({ data }: { data: CountryResponse[0] }) {
               Border countries:
             </h3>
             <div className="grid w-full grid-cols-3 gap-5">
-              {data.borders.map((border) => {
-                const country = countries.getName(border, 'en')
+              {country.borders.map((alphaCountry) => {
+                const country = countries.getName(alphaCountry, 'en')
 
                 return (
-                  country && <BorderCountry key={border} country={country} />
+                  country && (
+                    <BorderCountry
+                      key={alphaCountry}
+                      alpha={alphaCountry}
+                      country={country}
+                    />
+                  )
                 )
               })}
             </div>
@@ -139,10 +147,10 @@ function Detail({
   )
 }
 
-function BorderCountry({ country }: { country: string }) {
+function BorderCountry({ country, alpha }: { country: string; alpha: string }) {
   return (
     <Link
-      to={`/${country.toLowerCase()}`}
+      to={`/${alpha.toLowerCase()}`}
       className="flex items-center justify-center rounded-md py-2 shadow-[0_0px_20px_rgba(0,0,0,0.1)]"
     >
       <p className="text-center">{country}</p>

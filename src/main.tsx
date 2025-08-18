@@ -37,7 +37,7 @@ createRoot(document.getElementById('root')!).render(
         <Routes>
           <Route path="/" element={<Root />}>
             <Route index element={<HomePage />} />
-            <Route path=":country" element={<CountryPage />} />
+            <Route path=":countryCode" element={<CountryPage />} />
           </Route>
         </Routes>
       </BrowserRouter>

@@ -54,12 +54,9 @@ function HomePage() {
   )
 
   const countries = useMemo(() => {
-    if (country) return { data: [country.data[0]] } // Show only one country
-    if (selectedRegion === 'All') {
-      return allCountries
-    } else {
-      return countriesByRegion
-    }
+    if (country) return country
+    if (selectedRegion === 'All') return allCountries
+    return countriesByRegion
   }, [selectedRegion, allCountries, countriesByRegion, country])
 
   return (

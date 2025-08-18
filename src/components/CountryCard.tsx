@@ -10,7 +10,7 @@ const CountryCard = memo(function CountryCard({
   return (
     <div className="flex w-full flex-col items-center justify-center rounded-sm bg-white shadow-[0_5px_15px_rgba(0,0,0,0.05)]">
       <Link
-        to={`/${data.name.common.toLowerCase()}`}
+        to={`/${data.cca3.toLowerCase()}`}
         className="aspect-3/2 w-full cursor-pointer rounded-t-sm bg-gray-200"
       >
         <img

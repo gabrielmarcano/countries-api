@@ -17,9 +17,10 @@ type Country = {
   capital: string[]
   region: string
   population: number
+  cca3: string
 }
 
-type ExtendedCountry = Country & {
+export type AlphaResponse = Country & {
   tld: string[]
   currencies: {
     [key: string]: {
@@ -31,9 +32,7 @@ type ExtendedCountry = Country & {
   languages: {
     [key: string]: string
   }
-  borders: string[]
+  borders: string[] | []
 }
-
-export type CountryResponse = ExtendedCountry[]
 
 export type CountriesResponse = Country[]

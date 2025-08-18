@@ -1,5 +1,10 @@
 import { useQuery } from '@tanstack/react-query'
-import { getAllCountries, getCountriesByRegion, getCountry } from './api'
+import {
+  getAllCountries,
+  getAlpha,
+  getCountriesByRegion,
+  getCountry,
+} from './api'
 
 export const useAllCountries = (config?: object) => {
   return useQuery({
@@ -17,10 +22,18 @@ export const useCountriesByRegion = (region: string, config?: object) => {
   })
 }
 
-export const useCountry = (name: string, config?: object) => {
+export const useCountry = (country: string, config?: object) => {
   return useQuery({
-    queryKey: ['country', name],
-    queryFn: () => getCountry(name),
+    queryKey: ['country', country],
+    queryFn: () => getCountry(country),
+    ...config,
+  })
+}
+
+export const useAlpha = (countryCode: string, config?: object) => {
+  return useQuery({
+    queryKey: ['alpha', countryCode],
+    queryFn: () => getAlpha(countryCode),
     ...config,
   })
 }
