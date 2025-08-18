@@ -6,7 +6,7 @@ function CountryCard({ data }: { data: CountriesResponse[0] }) {
     <div className="mb-10 flex w-full flex-col items-center justify-center rounded-sm bg-white shadow-[0_5px_15px_rgba(0,0,0,0.05)]">
       <Link
         to={`/${data.name.common.toLowerCase()}`}
-        className="aspect-4/3 w-full cursor-pointer rounded-t-sm bg-gray-200"
+        className="aspect-3/2 w-full cursor-pointer rounded-t-sm bg-gray-200"
       >
         <img
           src={data.flags.png}
