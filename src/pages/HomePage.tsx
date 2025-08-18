@@ -5,7 +5,11 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import CountryCard from '../components/CountryCard'
 import { useEffect, useMemo, useState } from 'react'
-import { useAllCountries, useCountriesByRegion } from '../api/queries'
+import {
+  useAllCountries,
+  useCountriesByRegion,
+  useCountry,
+} from '../api/queries'
 import CountryCardSkeleton from '../components/CountryCardSkeleton'
 
 function HomePage() {
@@ -31,13 +35,31 @@ function HomePage() {
     enabled: selectedRegion !== 'All',
   })
 
+  const {
+    data: country,
+    isLoading: isLoadingCountry,
+    isError: isErrorCountry,
+  } = useCountry(search, {
+    enabled: !!search,
+  })
+
+  const isLoadingAll = useMemo(
+    () => isLoading || isLoadingByRegion || isLoadingCountry,
+    [isLoading, isLoadingByRegion, isLoadingCountry]
+  )
+  const isErrorAll = useMemo(
+    () => isError || isErrorByRegion || isErrorCountry,
+    [isError, isErrorByRegion, isErrorCountry]
+  )
+
   const countries = useMemo(() => {
+    if (country) return { data: [country.data[0]] } // Show only one country
     if (selectedRegion === 'All') {
       return allCountries
     } else {
       return countriesByRegion
     }
-  }, [selectedRegion, allCountries, countriesByRegion])
+  }, [selectedRegion, allCountries, countriesByRegion, country])
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -48,10 +70,6 @@ function HomePage() {
       clearTimeout(timer)
     }
   }, [inputValue])
-
-  useEffect(() => {
-    console.log(search)
-  }, [search])
 
   return (
     <>
@@ -72,33 +90,14 @@ function HomePage() {
               />
             </div>
           </div>
-          <button
-            onClick={() => setIsOpen(!isOpen)}
-            className="relative flex w-50 cursor-pointer items-center justify-between rounded-md p-4 text-sm shadow-[0_0px_20px_rgba(0,0,0,0.1)]"
-          >
-            <p className="pl-4">
-              {selectedRegion === 'All' ? 'Filter by Region' : selectedRegion}
-            </p>
-            <FontAwesomeIcon icon={faChevronDown} className="text-xs" />
-            <div
-              className={` ${isOpen ? 'flex' : 'hidden'} absolute bottom-0 left-0 w-full translate-y-51/50 cursor-pointer flex-col rounded-md bg-white text-sm shadow-[0_0px_20px_rgba(0,0,0,0.1)]`}
-            >
-              {['All', 'Africa', 'America', 'Asia', 'Europe', 'Oceania'].map(
-                (region) => (
-                  <RegionOption
-                    key={region}
-                    region={region}
-                    onClick={() => {
-                      setSelectedRegion(region)
-                      setIsOpen(false)
-                    }}
-                    top={region === 'All'}
-                    bottom={region === 'Oceania'}
-                  />
-                )
-              )}
-            </div>
-          </button>
+          {!country && (
+            <Filter
+              selectedRegion={selectedRegion}
+              setSelectedRegion={setSelectedRegion}
+              isOpen={isOpen}
+              setIsOpen={setIsOpen}
+            />
+          )}
         </div>
         <div className="flex w-full flex-col items-center justify-center px-6">
           {countries &&
@@ -106,20 +105,60 @@ function HomePage() {
               <CountryCard key={country.name.common} data={country} />
             ))}
 
-          {(isLoading || isLoadingByRegion) && (
+          {isLoadingAll && (
             <>
-              {[...Array(6)].map((_, i) => (
+              {[...Array(isLoadingCountry ? 1 : 6)].map((_, i) => (
                 <CountryCardSkeleton key={i} />
               ))}
             </>
           )}
 
-          {(isError || isErrorByRegion) && (
-            <p className="text-red-500">Error</p>
-          )}
+          {isErrorAll && <p className="text-red-500">Error</p>}
         </div>
       </div>
     </>
+  )
+}
+
+function Filter({
+  selectedRegion,
+  setSelectedRegion,
+  isOpen,
+  setIsOpen,
+}: {
+  selectedRegion: string
+  setSelectedRegion: (region: string) => void
+  isOpen: boolean
+  setIsOpen: (isOpen: boolean) => void
+}) {
+  return (
+    <button
+      onClick={() => setIsOpen(!isOpen)}
+      className="relative flex w-50 cursor-pointer items-center justify-between rounded-md p-4 text-sm shadow-[0_0px_20px_rgba(0,0,0,0.1)]"
+    >
+      <p className="pl-4">
+        {selectedRegion === 'All' ? 'Filter by Region' : selectedRegion}
+      </p>
+      <FontAwesomeIcon icon={faChevronDown} className="text-xs" />
+      <div
+        className={` ${isOpen ? 'flex' : 'hidden'} absolute bottom-0 left-0 w-full translate-y-51/50 cursor-pointer flex-col rounded-md bg-white text-sm shadow-[0_0px_20px_rgba(0,0,0,0.1)]`}
+      >
+        {['All', 'Africa', 'America', 'Asia', 'Europe', 'Oceania'].map(
+          (region) => (
+            <RegionOption
+              key={region}
+              region={region}
+              onClick={() => {
+                setSelectedRegion(region)
+                setIsOpen(false)
+              }}
+              top={region === 'All'}
+              bottom={region === 'Oceania'}
+            />
+          )
+        )}
+      </div>
+    </button>
   )
 }
 
