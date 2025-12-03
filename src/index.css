@@ -4,26 +4,39 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  /* Dark Mode Elements */
-  --color-blue-900: hsl(209, 23%, 22%);
+  /* Modern Palette */
 
-  /* Dark Mode Background  */
-  --color-blue-950: hsl(207, 26%, 17%);
+  /* Brand/Primary Colors (Deep Indigo/Blue) */
+  --color-brand-50: hsl(225, 100%, 98%);
+  --color-brand-100: hsl(225, 100%, 94%);
+  --color-brand-500: hsl(225, 73%, 57%);
+  --color-brand-600: hsl(225, 60%, 50%);
+  --color-brand-900: hsl(225, 60%, 20%);
 
-  /* Light Mode Text */
-  --color-gray-950: hsl(200, 15%, 8%);
+  /* Dark Mode Backgrounds */
+  --color-dark-bg: hsl(207, 26%, 17%); /* Very Dark Blue (Background) */
+  --color-dark-element: hsl(209, 23%, 22%); /* Dark Blue (Elements) */
 
-  /* Light Mode Input */
-  --color-gray-400: hsl(0, 0%, 50%);
+  /* Light Mode Backgrounds */
+  --color-light-bg: hsl(0, 0%, 98%); /* Very Light Gray */
+  --color-light-element: hsl(0, 0%, 100%); /* White */
 
-  /* Light Mode Background */
-  --color-gray-50: hsl(0, 0%, 99%);
-
-  /* Dark Mode Text & Light Mode Elements */
-  --color-white: hsl(0, 100%, 100%);
-
-  --text-homepage-items: 14px;
-  --text-detail-page: 16px;
+  /* Text Colors */
+  --color-text-main-light: hsl(200, 15%, 8%);
+  --color-text-main-dark: hsl(0, 0%, 100%);
+  --color-text-muted-light: hsl(0, 0%, 52%);
+  --color-text-muted-dark: hsl(0, 0%, 80%);
 
   --font-nunito: 'Nunito Sans', sans-serif;
+
+  --shadow-card: 0 0 15px rgba(0, 0, 0, 0.05);
+  --shadow-card-hover: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* Global Reset/Base */
+@layer base {
+    body {
+        font-family: var(--font-nunito);
+        @apply bg-light-bg text-text-main-light dark:bg-dark-bg dark:text-text-main-dark transition-colors duration-300;
+    }
 }
