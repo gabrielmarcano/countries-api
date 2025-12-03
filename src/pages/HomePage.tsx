@@ -64,17 +64,17 @@ function HomePage() {
       <div className="flex flex-col items-center p-6 md:p-12 xl:px-20">
         <div className="mb-10 w-full md:mb-16 md:flex md:justify-between">
           <div className="mb-12 flex w-full md:mb-0">
-            <div className="flex w-full items-center rounded-md px-8 py-4 shadow-[0_0px_20px_rgba(0,0,0,0.1)] md:w-3/4 xl:w-3/7">
+            <div className="flex w-full items-center rounded-lg bg-white px-8 py-4 shadow-[0_0px_20px_rgba(0,0,0,0.1)] transition-shadow duration-300 hover:shadow-[0_0px_25px_rgba(0,0,0,0.15)] dark:bg-blue-900 dark:shadow-[0_0px_20px_rgba(0,0,0,0.3)] dark:hover:shadow-[0_0px_25px_rgba(0,0,0,0.4)] md:w-3/4 xl:w-3/7">
               <FontAwesomeIcon
                 icon={faMagnifyingGlass}
-                className="text-gray-400"
+                className="text-gray-400 dark:text-gray-500"
               />
               <input
                 type="text"
                 onChange={(e) => setInputValue(e.target.value)}
                 value={inputValue}
                 placeholder="Search for a country..."
-                className="ml-6 w-full text-sm text-gray-400 outline-none"
+                className="ml-6 w-full bg-transparent text-sm text-gray-900 outline-none placeholder:text-gray-400 dark:text-white dark:placeholder:text-gray-500"
               />
             </div>
           </div>
@@ -101,7 +101,11 @@ function HomePage() {
             </>
           )}
 
-          {isErrorAll && <p className="text-red-500">Error</p>}
+          {isErrorAll && (
+            <p className="text-red-500 dark:text-red-400">
+              Error loading countries
+            </p>
+          )}
         </div>
       </div>
     </>
@@ -122,14 +126,14 @@ function Filter({
   return (
     <button
       onClick={() => setIsOpen(!isOpen)}
-      className="relative flex w-50 cursor-pointer items-center justify-between rounded-md p-4 text-sm shadow-[0_0px_20px_rgba(0,0,0,0.1)] md:w-1/2 xl:w-1/5"
+      className="relative flex w-50 cursor-pointer items-center justify-between rounded-lg bg-white p-4 text-sm shadow-[0_0px_20px_rgba(0,0,0,0.1)] transition-shadow duration-300 hover:shadow-[0_0px_25px_rgba(0,0,0,0.15)] dark:bg-blue-900 dark:text-white dark:shadow-[0_0px_20px_rgba(0,0,0,0.3)] dark:hover:shadow-[0_0px_25px_rgba(0,0,0,0.4)] md:w-1/2 xl:w-1/5"
     >
       <p className="pl-4">
         {selectedRegion === 'All' ? 'Filter by Region' : selectedRegion}
       </p>
       <FontAwesomeIcon icon={faChevronDown} className="text-xs" />
       <div
-        className={` ${isOpen ? 'flex' : 'hidden'} absolute bottom-0 left-0 w-full translate-y-51/50 cursor-pointer flex-col rounded-md bg-white text-sm shadow-[0_0px_20px_rgba(0,0,0,0.1)]`}
+        className={` ${isOpen ? 'flex' : 'hidden'} absolute bottom-0 left-0 z-10 w-full translate-y-51/50 cursor-pointer flex-col rounded-lg bg-white text-sm shadow-[0_0px_20px_rgba(0,0,0,0.1)] dark:bg-blue-900 dark:shadow-[0_0px_20px_rgba(0,0,0,0.3)]`}
       >
         {['All', 'Africa', 'America', 'Asia', 'Europe', 'Oceania'].map(
           (region) => (
@@ -164,7 +168,7 @@ function RegionOption({
   return (
     <div
       onClick={onClick}
-      className={`w-full cursor-pointer py-2 pl-6 text-left hover:bg-gray-50 ${top && 'rounded-t-md pt-4'} ${bottom && 'rounded-b-md pb-4'}`}
+      className={`w-full cursor-pointer py-2 pl-6 text-left transition-colors duration-200 hover:bg-gray-50 dark:hover:bg-blue-800 ${top && 'rounded-t-lg pt-4'} ${bottom && 'rounded-b-lg pb-4'}`}
     >
       {region}
     </div>
