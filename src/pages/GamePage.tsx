@@ -43,24 +43,22 @@ function GamePage() {
   const startGame = () => {
     if (!allCountries?.data) return
 
-    // Filter countries that have borders
-    const countriesWithBorders = allCountries.data.filter(
+    // Filter countries that have cca3 codes (will verify borders when loading detailed data)
+    const countriesWithCodes = allCountries.data.filter(
       (country) => country.cca3
     )
 
     // Pick two random countries
-    const randomIndex1 = Math.floor(
-      Math.random() * countriesWithBorders.length
-    )
-    let randomIndex2 = Math.floor(Math.random() * countriesWithBorders.length)
+    const randomIndex1 = Math.floor(Math.random() * countriesWithCodes.length)
+    let randomIndex2 = Math.floor(Math.random() * countriesWithCodes.length)
 
     // Ensure they're different
     while (randomIndex2 === randomIndex1) {
-      randomIndex2 = Math.floor(Math.random() * countriesWithBorders.length)
+      randomIndex2 = Math.floor(Math.random() * countriesWithCodes.length)
     }
 
-    const startCountry = countriesWithBorders[randomIndex1].cca3.toLowerCase()
-    const endCountry = countriesWithBorders[randomIndex2].cca3.toLowerCase()
+    const startCountry = countriesWithCodes[randomIndex1].cca3.toLowerCase()
+    const endCountry = countriesWithCodes[randomIndex2].cca3.toLowerCase()
 
     setGameState({
       currentCountry: startCountry,
@@ -180,7 +178,9 @@ function GamePage() {
             </h3>
             <div className="flex flex-wrap gap-2">
               {gameState.path.map((code, index) => {
-                const countryName = countries.getName(code.toUpperCase(), 'en')
+                const countryName =
+                  countries.getName(code.toUpperCase(), 'en') ||
+                  code.toUpperCase()
                 return (
                   <span
                     key={code}
@@ -269,7 +269,9 @@ function GamePage() {
 
       {isErrorCurrent && (
         <div className="w-full text-center">
-          <p className="text-red-500">Error loading country data</p>
+          <p className="text-red-500 dark:text-red-400">
+            Error loading country data
+          </p>
         </div>
       )}
 
@@ -293,13 +295,14 @@ function GamePage() {
             {currentCountryData.data.borders &&
             currentCountryData.data.borders.length > 0 ? (
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {currentCountryData.data.borders.map((alphaCountry) => {
-                  const countryName = countries.getName(alphaCountry, 'en')
-                  const isTarget =
-                    alphaCountry.toLowerCase() === gameState.targetCountry
+                {currentCountryData.data.borders
+                  .filter((alphaCountry) => countries.getName(alphaCountry, 'en'))
+                  .map((alphaCountry) => {
+                    const countryName = countries.getName(alphaCountry, 'en')!
+                    const isTarget =
+                      alphaCountry.toLowerCase() === gameState.targetCountry
 
-                  return (
-                    countryName && (
+                    return (
                       <button
                         key={alphaCountry}
                         onClick={() => moveToCountry(alphaCountry)}
@@ -315,8 +318,7 @@ function GamePage() {
                         )}
                       </button>
                     )
-                  )
-                })}
+                  })}
               </div>
             ) : (
               <div className="rounded-lg bg-yellow-50 p-6 dark:bg-yellow-900/20">
