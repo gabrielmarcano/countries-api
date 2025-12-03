@@ -6,6 +6,8 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { BrowserRouter, Route, Routes } from 'react-router'
 import CountryPage from './pages/CountryPage.tsx'
 import HomePage from './pages/HomePage.tsx'
+import WelcomePage from './pages/WelcomePage.tsx'
+import GameLayout from './pages/GameLayout.tsx'
 
 import countries from 'i18n-iso-countries'
 import en from 'i18n-iso-countries/langs/en.json'
@@ -36,8 +38,16 @@ createRoot(document.getElementById('root')!).render(
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Root />}>
-            <Route index element={<HomePage />} />
-            <Route path=":countryCode" element={<CountryPage />} />
+            <Route index element={<WelcomePage />} />
+
+            <Route path="browse">
+                <Route index element={<HomePage />} />
+                <Route path=":countryCode" element={<CountryPage />} />
+            </Route>
+
+            <Route path="play" element={<GameLayout />}>
+                 <Route path=":countryCode" element={<CountryPage />} />
+            </Route>
           </Route>
         </Routes>
       </BrowserRouter>
